@@ -103,4 +103,17 @@ Mat getLocalRegionLBPH(const Mat& src, int minValue, int maxValue, bool normed);
 
 int LBP();
 
+
+#define ENABLE_INTEGRAL   (1)
+//////////////////////////////////////////////////////////////////////////
+/// \brief  积分图的快速实现算法
+/// \remark 
+/// \param[in]  src    源灰度图
+/// \param[in]  width  源灰度图宽
+/// \param[in]  height  源灰度图高
+/// \param[in/out]  integral   积分图输出,为了用opencv显示出来才定义为float型的，实际可使用int*
+/// \return     success/fail
+//////////////////////////////////////////////////////////////////////////
+int integral_image_cacul(const unsigned char*  src, int width, int height, float *  integral);
+
 #endif

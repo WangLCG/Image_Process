@@ -293,6 +293,8 @@ int LBP( )
 
     Mat dst_MB_img(height, width, CV_8UC1);
 
+    Mat integral(height + 1, width + 1, CV_32FC1);  //积分图宽高均比原图多1
+
     for (int cnt = 0; ; cnt++)
     {
         vc >> frame;
@@ -336,6 +338,18 @@ int LBP( )
         imshow("circle_img", dst_circle_img);
         imshow("unifom_img", dst_unifom_img);
         imshow("mb_lbp", dst_MB_img);
+
+        //积分图计算 
+#if ENABLE_INTEGRAL
+        integral_image_cacul(YFrame.data, width, height, (float*)integral.data);
+
+        //显示用
+        normalize(integral, integral, 0, 255, CV_MINMAX);
+        Mat imageIntegralNorm;
+        convertScaleAbs(integral, imageIntegralNorm); //精度转换为8位int整型
+
+        imshow("integral_img", imageIntegralNorm);
+#endif
 
         cvWaitKey(1);
     }
@@ -402,4 +416,43 @@ Mat getLocalRegionLBPH(const Mat& src, int minValue, int maxValue, bool normed)
     }
     //结果表示成只有1行的矩阵
     return result.reshape(1, 1);
+}
+
+int integral_image_cacul(const unsigned char*  src, int width, int height, float *  integral)
+{
+    if (!src || !integral)
+        return -1;
+
+    {
+        int dst_w = width + 1;  //积分图比原图宽高均大1，为了计算时用到原图的所有像素 
+        int src_idx = 0;
+        int i = 0, j = 0;
+
+        int offset = 1;
+
+        memset(integral, 0, width * height * sizeof(float));
+
+        // 计算首行积分图（清零）
+        memset(integral, 0, sizeof(float) * dst_w);
+
+        // 逐行计算
+        for (i = 0; i < height; i++)
+        {
+            int sum = 0;
+
+            // 首列积分图（清零）
+            integral[offset + dst_w - 1] = 0;
+
+            // I(X,Y) = I(X,Y-1) + 行累加
+            for (j = 0; j < width; j++, src_idx++)
+            {
+                sum += src[src_idx];
+                integral[offset + dst_w + j] = integral[offset + j] + sum;
+            }
+
+            offset += dst_w;
+        }
+    }
+
+    return 0;
 }
