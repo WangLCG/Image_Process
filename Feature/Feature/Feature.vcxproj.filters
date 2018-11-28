@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Harris">
+      <UniqueIdentifier>{53b1fb64-d1a9-4ef7-819b-523d42a06ed9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,6 +24,9 @@
     <ClCompile Include="Feature.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Harris\harris.cpp">
+      <Filter>Harris</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cvhead.h">
@@ -28,6 +34,9 @@
     </ClInclude>
     <ClInclude Include="Feature.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Harris\harris.h">
+      <Filter>Harris</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
