@@ -120,7 +120,10 @@ int harris_main_CStyle()
     imshow("C_HarrisRespond", HarrisRespond);
     imshow("C_resultImage", resultImage);
 
-    //waitKey(0);
+    imwrite("./C_HarrisRespond.jpg", HarrisRespond);
+    imwrite("./C_resultImage.jpg", resultImage);
+
+    waitKey(0);
     return 0;
 
 }
@@ -497,10 +500,16 @@ void harrisResponse_CStyle(float* GaussXX, float* GaussYY, float* GaussXY, float
         int index = i * width;
         for (int j = 0; j < width; j++)
         {
-            unsigned int a = GaussXX[index+j];
-            unsigned int b = GaussYY[index + j];
-            unsigned int c = GaussXY[index + j];
-            resultData[index + j] = a * b - c * c - k * (a + b) * (a + b);
+            float a = GaussXX[index+j];
+            float b = GaussYY[index + j];
+            float c = GaussXY[index + j];
+            
+            //2x2矩阵特征值  
+            float r1 = (float) ( (a + b - sqrt((a - b)*(a - b) + 4 * c*c) ) / 2.0);
+            float r2 = (float) ( (a + b + sqrt((a - b)*(a - b) + 4 * c*c) ) / 2.0);
+            resultData[index + j] = r1 * r2 - k * (r1 + r2) * (r1 + r2);
+            
+            //resultData[index + j] = a * b - c * c - k * (a + b) * (a + b);
         }
     }
 }
