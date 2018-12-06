@@ -5,6 +5,8 @@
 using namespace cv;
 using namespace std;
 
+#define ENABLE_SHI_TOMASI_CONNER_POINT  (0)    //使用Shi_Tomais角点,Harris的改进 
+
 /*
 RGB转换成灰度图像的一个常用公式是：
 Gray = R*0.299 + G*0.587 + B*0.114

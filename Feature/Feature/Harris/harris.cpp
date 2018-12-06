@@ -506,9 +506,13 @@ void harrisResponse_CStyle(float* GaussXX, float* GaussYY, float* GaussXY, float
             
             //2x2矩阵特征值  
             float r1 = (float) ( (a + b - sqrt((a - b)*(a - b) + 4 * c*c) ) / 2.0);
+
+#ifdef ENABLE_SHI_TOMASI_CONNER_POINT
+            resultData[index + j] = r1;
+#else
             float r2 = (float) ( (a + b + sqrt((a - b)*(a - b) + 4 * c*c) ) / 2.0);
             resultData[index + j] = r1 * r2 - k * (r1 + r2) * (r1 + r2);
-            
+#endif
             //resultData[index + j] = a * b - c * c - k * (a + b) * (a + b);
         }
     }
@@ -543,7 +547,12 @@ void draw_point(unsigned char* src_img, int width, int height, int index_w, int 
     src_img[index2 + index_w + 1] = color;
 }
 
+#ifdef ENABLE_SHI_TOMASI_CONNER_POINT
+#define  MAX_THREHOLD  (80)
+#else
 #define  MAX_THREHOLD  (8000)
+#endif
+
 //非极大值抑制
 void LocalMaxValue(Mat_<float> &resultData, Mat &srcGray, Mat &ResultImage, int kSize)
 {
