@@ -1,0 +1,7 @@
+#!/bin/sh
+
+for file in `ls *.html`
+do
+	cp $file `echo $file | sed s/'\.html'/"\.html~$1"/`
+done
+

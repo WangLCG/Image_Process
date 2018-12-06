@@ -1,0 +1,78 @@
+<title> KLT:  Kanade-Lucas-Tomasi Feature Tracker </title>
+<IMG SRC="http://www-cs.stanford.edu/gifs/line.blue3.gif" ALT="-----">
+<h1> KLT:  An Implementation of the Kanade-Lucas-Tomasi Feature Tracker </h1>
+<IMG SRC="http://www-cs.stanford.edu/gifs/line.blue3.gif" ALT="-----"><p>
+
+KLT is an implementation, in the C programming language, of a feature 
+tracker that will hopefully be of interest to the computer vision community.
+The tracker is based on the early work of Lucas and 
+<a href="http://www.cs.cmu.edu/afs/cs/user/tk/www/home.html">
+Kanade</a>
+[1] and was developed fully by 
+<a href="http://flamingo.stanford.edu/users/tomasi/bio.html">
+Tomasi</a>
+and Kanade [2], but the only
+published, readily accessible description is contained in the paper by
+<a href="http://www.cs.berkeley.edu/~jshi/">
+Shi </a>
+and Tomasi [3].  
+Recently, Tomasi proposed a slight modification which
+makes the computation symmetric with respect to the two images; the
+resulting equation is fully derived
+in the unpublished note by 
+<a href="http://vision.stanford.edu/~birch">
+Birchfield </a> 
+[4].<p>
+
+Briefly, good features are located by examining the minimum
+eigenvalue of each 2 by 2 gradient matrix, and features are
+tracked using a Newton-Raphson method of minimizing the difference
+between the two windows.  
+Multiresolution tracking allows for even large displacements between
+images.
+Currently, the affine computation that evaluates the consistency
+of features between non-consecutive frames [3] 
+is not implemented. <p>
+
+<ul>
+<li> <a href="installation.html"> Obtaining and Installing the Code </a>
+<li> <a href="user/index.html"> Tutorial / User's Manual </a>
+<li> <a href="ref/index.html"> Reference Manual </a>
+<li> <a href="log.html"> Log of Changes </a>
+
+</ul>
+
+<hr>
+<h1> References </h1>
+<dl>
+<dt> [1] Bruce D. Lucas and Takeo Kanade.
+	<b> An Iterative Image Registration Technique with an
+              Application to Stereo Vision. </b>
+	International Joint Conference on Artificial Intelligence,
+	pages 674-679, 1981.<p>
+
+<dt> [2] Carlo Tomasi and Takeo Kanade.  
+	<b> Detection and Tracking of Point Features. </b>
+	Carnegie Mellon University Technical Report CMU-CS-91-132,
+	April 1991.<p>
+
+<dt> [3] Jianbo Shi and Carlo Tomasi.
+	<a href="shiCvpr94.ps.gz">
+     <b> Good Features to Track.</b> </a>
+	IEEE Conference on Computer Vision and Pattern Recognition,
+	pages 593-600, 1994.<p>
+
+<dt> [4] Stan Birchfield.
+	<a href="derivation.ps">
+     <b> Derivation of Kanade-Lucas-Tomasi Tracking Equation. </b> </a>
+	Unpublished, May 1996.
+</dl>
+
+<hr>
+
+<em> Last updated by 
+<a href="http://vision.stanford.edu/~birch"> Stan Birchfield</a> on
+March 11, A. D. 1998</em><br>
+<a href="mailto:birchfield@cs.stanford.edu">
+      <em>birchfield@cs.stanford.edu</em></a>
+

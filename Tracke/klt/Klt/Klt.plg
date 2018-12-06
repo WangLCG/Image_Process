@@ -1,0 +1,48 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Klt - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP102.tmp" with contents
+[
+/nologo /ML /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fo"Release/" /Fd"Release/" /FD /c 
+"C:\stb\klt\Klt\main.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP102.tmp" 
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP103.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:no /pdb:"Release/Klt.pdb" /machine:I386 /out:"Release/Klt.exe" 
+.\Release\StdAfx.obj
+.\Release\Klt.obj
+.\Release\convolve.obj
+.\Release\error.obj
+.\Release\example1.obj
+.\Release\example2.obj
+.\Release\example3.obj
+.\Release\example4.obj
+.\Release\example5.obj
+.\Release\klt_util.obj
+.\Release\pnmio.obj
+.\Release\pyramid.obj
+.\Release\selectGoodFeatures.obj
+.\Release\storeFeatures.obj
+.\Release\trackFeatures.obj
+.\Release\writeFeatures.obj
+.\Release\main.obj
+]
+Creating command line "link.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP103.tmp"
+<h3>Output Window</h3>
+Compiling...
+main.cpp
+Linking...
+
+
+
+<h3>Results</h3>
+Klt.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
