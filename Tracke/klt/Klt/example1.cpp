@@ -8,69 +8,18 @@ and prints the features to the screen.
 #include "pnmio.h"
 #include "klt.h"
 
-#include"cvhead.h"
+#include "cvhead.h"
+#include "draw_img.h"
+
 using namespace cv;
 using namespace std;
 
-typedef struct XY_Point
-{
-    int x;
-    int y;
-}XY_Point;
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-    //画点
-    static void Customer_drawPoint(unsigned char * dst, int width, int height, int x, int y, int color)
-    {
-        if (x <= 0) x = 1;
-        if (x >= width - 1) x = width - 1;
-        if (y <= 0) y = 1;
-        if (y >= height - 1) y = height - 1;
-        dst[y * width + x] = 255;
-    }
-
-    //划线
-    static void Customer_drawLine(unsigned char *dst, int width, int height, int x0, int y0, int x1, int y1, int color)
-    {
-        int x_min = 0, x_max = 0;
-        int y_min = 0, y_max = 0;
-        int x_step = 0, y_step = 0;
-        int x = 0, y = 0;
-        int y_t = 0;
-
-
-        x_min = x0 < x1 ? x0 : x1;
-        x_max = x0 < x1 ? x1 : x0;
-        y_min = y0 < y1 ? y0 : y1;
-        y_max = y0 < y1 ? y1 : y0;
-        x_step = x_max - x_min;
-        y_step = y_max - y_min;
-
-        //绘制直线   
-        if (x_step == 0 || y_step == 0)
-        {
-            for (x = x_min; x <= x_max; x++)
-            {
-                for (y = y_min; y <= y_max; y++)
-                {
-                    Customer_drawPoint(dst, width, height, x, y, color);
-                }
-            }
-        }
-        else//绘制非直线  
-        {
-            for (x = x_min; x <= x_max; x++)
-            {
-                //利用x来偏移y   
-                y_t = (int)(((float)y_step / x_step) * (x - x_min)) + y_min;
-                Customer_drawPoint(dst, width, height, x, y_t, color);
-            }
-        }
-    }
-
+    
     void RunExample1()
     {
         unsigned char *img1, *img2;
@@ -113,8 +62,8 @@ extern "C"
         img1 = new unsigned char[width * height];
         memset(img1, 0 , width * height * sizeof(unsigned char));
 
-        Mat feature1(height, width, CV_8UC1);
-        Mat feature2(height, width, CV_8UC1);
+        //Mat feature1(height, width, CV_8UC1);
+        //Mat feature2(height, width, CV_8UC1);
         Mat track_result(height, width, CV_8UC1);
 
         //用于保存上一帧特征点信息
@@ -128,7 +77,6 @@ extern "C"
             {
                 cout << "video end.";
                 break;
-                vc.release();
             }
 
             cvtColor(frame, YFrame, CV_BGR2GRAY);
@@ -143,7 +91,11 @@ extern "C"
                 continue;
             }
 
+            ///shi-tomasi角点检测
             KLTSelectGoodFeatures(tc, img1, width, height, fl);
+            if (cnt == 1)
+                KLTWriteFeatureList(fl, "feat1.txt", "%3d");
+
             //printf("\nIn first image:\n");
             //feature1 = YFrame.clone();
             for (i = 0; i < fl->nFeatures; i++)
@@ -165,6 +117,9 @@ extern "C"
             }
             //KLTTrackFeatures(tc, img1, img2, width, height, fl);
             KLTTrackFeatures(tc, img1, img2, width, height, fl);
+
+            if (cnt == 1)
+                KLTWriteFeatureList(fl, "feat2.txt", "%3d");
 
             //printf("\nIn second image:\n");
             //memcpy(feature2.data, img1, width * height);
@@ -224,6 +179,7 @@ extern "C"
             pre_feature = NULL;
         }
 
+        vc.release();
         //KLTWriteFeatureListToPPM(fl, img2, ncols, nrows, "feat2.ppm");
         //KLTWriteFeatureList(fl, "feat2.fl", NULL);      /* binary file */
         //KLTWriteFeatureList(fl, "feat2.txt", "%5.1f");  /* text file   */

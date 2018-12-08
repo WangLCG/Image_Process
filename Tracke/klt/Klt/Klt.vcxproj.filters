@@ -21,9 +21,6 @@
     <ClCompile Include="error.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="example2.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="example3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -66,6 +63,12 @@
     <ClCompile Include="example1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="draw_img.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="example2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cvhead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="draw_img.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

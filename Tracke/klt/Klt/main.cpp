@@ -7,7 +7,7 @@
 int main(int argc, char* argv[])
 {
     // select which example to run here
-    const int which = 1;
+    const int which = 2;
 
     // run the appropriate example
     switch (which) {

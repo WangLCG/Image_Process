@@ -202,6 +202,7 @@ static void _enforceMinimumDistance(
     assert(y >= 0);
     assert(y < nrows);
     
+    //使用上一帧跟踪成功特征点的情况下，找到featurelist中最后一个特征点的下一个位置   (该位置既是即将添加新角点的位置)   
     while (!overwriteAllFeatures && 
            indx < featurelist->nFeatures &&
            featurelist->feature[indx]->val >= 0)
@@ -270,9 +271,10 @@ static void _sortPointList(
 /*********************************************************************
  * _minEigenvalue
  *
- * Given the three distinct elements of the symmetric 2x2 matrix 对称2x2矩阵
+ * Given the three distinct elements of the symmetric 2x2 matrix 对称2x2矩阵   
  *                     [gxx gxy]
  *                     [gxy gyy],
+  (gxx-x)(gyy-x) - gxy*gxy = 0  求得最小特征值的表达式就是该函数公式   
  * Returns the minimum eigenvalue of the matrix.  
  */
 
@@ -416,7 +418,7 @@ void _KLTSelectGoodFeatures(
         *ptr++ = x;
         *ptr++ = y;
         val = _minEigenvalue(gxx, gxy, gyy);
-        if (val > limit)  
+        if (val > limit)  //最小特征值大于阈值，认为是一个强角点   
         {
           KLTWarning("(_KLTSelectGoodFeatures) minimum eigenvalue %f is "
                      "greater than the capacity of an int; setting "
@@ -460,7 +462,7 @@ void _KLTSelectGoodFeatures(
 
 /*********************************************************************
  * KLTSelectGoodFeatures
- *
+ *  shi-tomasi角点检测   
  * Main routine, visible to the outside.  Finds the good features in
  * an image.  
  * 
@@ -525,7 +527,8 @@ void KLTReplaceLostFeatures(
 {
   int nLostFeatures = fl->nFeatures - KLTCountRemainingFeatures(fl);
 
-  if (KLT_verbose >= 1)  {
+  if (KLT_verbose >= 1)  
+  {
     fprintf(stderr,  "(KLT) Attempting to replace %d features "
             "in a %d by %d image...  ", nLostFeatures, ncols, nrows);
     fflush(stderr);
@@ -536,7 +539,8 @@ void KLTReplaceLostFeatures(
     _KLTSelectGoodFeatures(tc, img, ncols, nrows, 
                            fl, REPLACING_SOME);
 
-  if (KLT_verbose >= 1)  {
+  if (KLT_verbose >= 1)  
+  {
     fprintf(stderr,  "\n\t%d features replaced.\n",
             nLostFeatures - fl->nFeatures + KLTCountRemainingFeatures(fl));
     if (tc->writeInternalImages)

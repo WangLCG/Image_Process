@@ -24,7 +24,7 @@ typedef float *_FloatWindow;
 
 /*********************************************************************
  * _interpolate
- * 
+ * 双线性差值   
  * Given a point (x,y) in an image, computes the bilinear interpolated 
  * gray-level value of the point in the image.  
  */
@@ -81,7 +81,7 @@ static void _computeIntensityDifference(
   /* Compute values */
   for (j = -hh ; j <= hh ; j++)
     for (i = -hw ; i <= hw ; i++)  {
-      g1 = _interpolate(x1+i, y1+j, img1);
+      g1 = _interpolate(x1+i, y1+j, img1);  //双线性差值得到坐标点处灰度值   
       g2 = _interpolate(x2+i, y2+j, img2);
       *imgdiff++ = g1 - g2;
     }
@@ -155,8 +155,10 @@ static void _compute2by2GradientMatrix(
     
     
 /*********************************************************************
- * _compute2by1ErrorVector
- *
+ * _compute2by1ErrorVector  
+ * 计算两幅图的之间的x,y方向移动距离之和    
+ * sx = (x1 - x2) * x方向偏导数   
+ * sy = (y1 - y2) * y方向偏导数   
  */
 
 static void _compute2by1ErrorVector(
@@ -314,6 +316,7 @@ static int _trackFeature(
   gradx   = _allocateFloatWindow(width, height);
   grady   = _allocateFloatWindow(width, height);
 
+  //牛顿迭代法求解方程  zd = e 得到移动距离dx,dy  
   /* Iteratively update the window position */
   do  {
 
@@ -330,6 +333,7 @@ static int _trackFeature(
     _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2, 
                                 width, height, imgdiff);
 
+    //梯度和，泰勒展开后需要   
     _computeGradientSum(gradx1, grady1, gradx2, grady2, 
             x1, y1, *x2, *y2, width, height, gradx, grady);
         
@@ -355,8 +359,9 @@ static int _trackFeature(
       *y2-hh < 0.0f || *y2+hh > nr-one_plus_eps)
     status = KLT_OOB;
 
-  /* Check whether residue is too large */
-  if (status == KLT_TRACKED)  {
+  /* Check whether residue is too large 检查残差是否过大   */
+  if (status == KLT_TRACKED)  
+  {
     _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2, 
                                 width, height, imgdiff);
     if (_sumAbsFloatWindow(imgdiff, width, height)/(width*height) > max_residue) 
@@ -447,8 +452,11 @@ void KLTTrackFeatures(
   tmpimg = _KLTCreateFloatImage(ncols, nrows);
 
   /* Process first image by converting to float, smoothing, computing */
-  /* pyramid, and computing gradient pyramids */
-  if (tc->sequentialMode && tc->pyramid_last != NULL)  {
+  /* pyramid, and computing gradient pyramids 
+   保留当前帧计算的金字塔和金字塔梯度，用于加速计算   
+  */
+  if (tc->sequentialMode && tc->pyramid_last != NULL)  
+  {
     pyramid1 = (_KLT_Pyramid) tc->pyramid_last;
     pyramid1_gradx = (_KLT_Pyramid) tc->pyramid_last_gradx;
     pyramid1_grady = (_KLT_Pyramid) tc->pyramid_last_grady;
@@ -458,7 +466,9 @@ void KLTTrackFeatures(
                ncols, nrows, pyramid1->ncols[0], pyramid1->nrows[0]);
     assert(pyramid1_gradx != NULL);
     assert(pyramid1_grady != NULL);
-  } else  {
+  } 
+  else  
+  {
     floatimg1_created = TRUE;
     floatimg1 = _KLTCreateFloatImage(ncols, nrows);
     _KLTToFloatImage(img1, ncols, nrows, tmpimg);
@@ -487,9 +497,11 @@ void KLTTrackFeatures(
                          pyramid2_grady->img[i]);
 
   /* Write internal images */
-  if (tc->writeInternalImages)  {
+  if (tc->writeInternalImages)  
+  {
     char fname[80];
-    for (i = 0 ; i < tc->nPyramidLevels ; i++)  {
+    for (i = 0 ; i < tc->nPyramidLevels ; i++)  
+    {
       sprintf(fname, "kltimg_tf_i%d.pgm", i);
       _KLTWriteFloatImageToPGM(pyramid1->img[i], fname);
       sprintf(fname, "kltimg_tf_i%d_gx.pgm", i);
@@ -506,8 +518,8 @@ void KLTTrackFeatures(
   }
 
   /* For each feature, do ... */
-  for (indx = 0 ; indx < featurelist->nFeatures ; indx++)  {
-
+  for (indx = 0 ; indx < featurelist->nFeatures ; indx++)  
+  {
     /* Only track features that are not lost */
     if (featurelist->feature[indx]->val >= 0)  
     {
@@ -515,7 +527,7 @@ void KLTTrackFeatures(
       xloc = featurelist->feature[indx]->x;
       yloc = featurelist->feature[indx]->y;
 
-      /* Transform location to coarsest resolution */
+      /* Transform location to coarsest resolution 最底层金字塔坐标    */
       for (r = tc->nPyramidLevels - 1 ; r >= 0 ; r--)  
       {
         xloc /= subsampling;  yloc /= subsampling;
@@ -528,7 +540,7 @@ void KLTTrackFeatures(
 
         /* Track feature at current resolution */
         xloc *= subsampling;  yloc *= subsampling;
-        xlocout *= subsampling;  ylocout *= subsampling;
+        xlocout *= subsampling;  ylocout *= subsampling;  //用上一帧图像特征点坐标初始化KLT跟踪输出坐标   
 
         val = _trackFeature(xloc, yloc, 
                             &xlocout, &ylocout,

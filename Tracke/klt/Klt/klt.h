@@ -21,12 +21,12 @@ typedef unsigned char KLT_PixelType;
 #define NULL  0
 #endif
 
-#define KLT_TRACKED           0
-#define KLT_NOT_FOUND        -1
-#define KLT_SMALL_DET        -2
-#define KLT_MAX_ITERATIONS   -3
-#define KLT_OOB              -4
-#define KLT_LARGE_RESIDUE    -5
+#define KLT_TRACKED           (0)   // 跟踪成功   
+#define KLT_NOT_FOUND        (-1)
+#define KLT_SMALL_DET        (-2)   //feature is lost
+#define KLT_MAX_ITERATIONS   (-3)   //tracking stopped because iterations timed out
+#define KLT_OOB              (-4)  //跟踪出错   
+#define KLT_LARGE_RESIDUE    (-5)  //残差过大  
 
 /*******************
  * Structures

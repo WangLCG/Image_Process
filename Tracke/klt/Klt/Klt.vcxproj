@@ -125,9 +125,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="convolve.c" />
+    <ClCompile Include="draw_img.cpp" />
     <ClCompile Include="error.c" />
     <ClCompile Include="example1.cpp" />
-    <ClCompile Include="example2.c" />
+    <ClCompile Include="example2.cpp" />
     <ClCompile Include="example3.c" />
     <ClCompile Include="example4.c" />
     <ClCompile Include="example5.c" />
@@ -151,6 +152,7 @@
     <ClInclude Include="base.h" />
     <ClInclude Include="convolve.h" />
     <ClInclude Include="cvhead.h" />
+    <ClInclude Include="draw_img.h" />
     <ClInclude Include="error.h" />
     <ClInclude Include="klt.h" />
     <ClInclude Include="KltExamples.h" />
